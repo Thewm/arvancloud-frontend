@@ -1,0 +1,14 @@
+export const ARTICLE_PUBLISH = 'publishArticle';
+export const ARTICLE_DELETE = 'deleteArticle';
+export const ARTICLE_EDIT = 'editArticle';
+export const ARTICLE_EDIT_ADD_TAG = 'addTagToArticle';
+export const ARTICLE_EDIT_REMOVE_TAG = 'removeTagFromArticle';
+export const ARTICLE_RESET_STATE = 'resetArticleState';
+export const CHECK_AUTH = 'checkAuth';
+export const FETCH_ARTICLE = 'fetchArticle';
+export const FETCH_ARTICLES = 'fetchArticles';
+export const FETCH_PROFILE = 'fetchProfile';
+export const FETCH_TAGS = 'fetchTags';
+export const LOGIN = 'login';
+export const LOGOUT = 'logout';
+export const REGISTER = 'register';
