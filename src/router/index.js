@@ -23,7 +23,13 @@ const routes = [
     component: () => import("@/views/Register.vue")
   },
   {
-    path: "/articles",
+    path: "/articles/",
+    name: "Dashboard",
+    component: () => import("@/views/Dashboard.vue"),
+    meta: { requiresAuth: true } // For protect this route
+  },
+  {
+    path: "/articles/page/:id",
     name: "Dashboard",
     component: () => import("@/views/Dashboard.vue"),
     meta: { requiresAuth: true } // For protect this route
