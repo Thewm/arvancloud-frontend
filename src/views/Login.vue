@@ -108,8 +108,7 @@ export default {
     return {
       link: "Register",
       email: null,
-      password: null,
-      error: false
+      password: null
     };
   },
   mixins: [rules],
