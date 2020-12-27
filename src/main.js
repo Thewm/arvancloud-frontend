@@ -9,6 +9,9 @@ import { checkAuth } from "@/store/types/actions";
 
 Vue.config.productionTip = false;
 
+// Using Event bus to make sidebar visible in smaller screen
+export const eventBus = new Vue();
+
 // Use initial setup to all around the app - use this init to call api wherever we want
 ApiService.init();
 
