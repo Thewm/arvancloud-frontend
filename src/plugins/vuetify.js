@@ -18,8 +18,5 @@ export default new Vuetify({
         success: "#4b713d"
       }
     }
-  },
-  breakpoint: {
-    laptopBreakpoint: "md" // This is equivalent to a value of 1200
   }
 });
