@@ -11,9 +11,3 @@ export default {
   name: "App"
 };
 </script>
-
-<style>
-.no-background-hover::before {
-  background-color: transparent !important;
-}
-</style>
