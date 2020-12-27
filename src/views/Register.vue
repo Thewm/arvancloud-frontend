@@ -14,7 +14,7 @@
               <h1
                 class="text-center form_text--text display-2 font-weight-regular my-4"
               >
-                Register
+                register
               </h1>
             </v-col>
           </v-row>
@@ -28,7 +28,7 @@
                 outlined
                 solo
                 autocomplete
-                v-model="user_name"
+                v-model="userName"
                 :rules="[rules.required]"
               ></v-text-field>
             </v-col>
@@ -80,7 +80,7 @@
           <v-row class="ml-4 mt-2">
             <v-col cols="11">
               <div class="d-md-flex align-center">
-                <p>Already Registered?</p>
+                <p>Already registered?</p>
                 <v-btn
                   :ripple="false"
                   text
@@ -99,14 +99,14 @@
 
 <script>
 import rules from "@/mixins/inputRules";
-import { REGISTER } from "@/store/actions.type";
+import { register } from "@/store/types/actions";
 
 export default {
-  name: "Login",
+  name: "Register",
   data() {
     return {
       link: "Login",
-      user_name: null,
+      userName: null,
       email: null,
       password: null
     };
@@ -115,13 +115,19 @@ export default {
   methods: {
     submit() {
       this.$store
-        .dispatch(REGISTER, {
+        .dispatch(register, {
           email: this.email,
           password: this.password,
-          username: this.user_name
+          username: this.userName
         })
         .then(() => this.$router.push({ name: "Dashboard" }));
     }
   }
 };
 </script>
+
+<style>
+.no-background-hover::before {
+  background-color: transparent !important;
+}
+</style>

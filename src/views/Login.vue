@@ -9,7 +9,7 @@
           dismissible
           close-icon="mdi-close"
         >
-          <strong class="error_alert_text--text mr-1">Login Failed!</strong>
+          <strong class="error_alert_text--text mr-1">login Failed!</strong>
           <span class="error_alert_text--text font-weight-regular"
             >User name and/or Password is is invalid</span
           >
@@ -101,7 +101,7 @@
 <script>
 import rules from "@/mixins/inputRules";
 import { mapState } from "vuex";
-import { LOGIN } from "@/store/actions.type";
+import { login } from "@/store/types/actions";
 export default {
   name: "Login",
   data() {
@@ -115,7 +115,7 @@ export default {
   methods: {
     submit(email, password) {
       this.$store
-        .dispatch(LOGIN, { email, password })
+        .dispatch(login, { email, password })
         .then(() => this.$router.push({ name: "Dashboard" }));
     }
   },
@@ -124,3 +124,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.no-background-hover::before {
+  background-color: transparent !important;
+}
+</style>
