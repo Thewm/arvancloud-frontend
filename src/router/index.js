@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
 
-import JwtService from "@/common/service.jwt";
+import Jwt from "@/common/storage";
 
 Vue.use(VueRouter);
 
@@ -25,19 +25,19 @@ const routes = [
   {
     path: "/articles/page/:id",
     component: () => import("@/views/Dashboard.vue"),
-    meta: { requiresAuth: true } // For protect this route
+    meta: { requiresAuth: true }
   },
   {
-    path: "/articles/",
+    path: "/articles",
     name: "Dashboard",
     component: () => import("@/views/Dashboard.vue"),
-    meta: { requiresAuth: true } // For protect this route
+    meta: { requiresAuth: true }
   },
   {
     path: "/articles/create",
     name: "create-article",
     component: () => import("@/views/CreateArticle.vue"),
-    meta: { requiresAuth: true } // For protect this route
+    meta: { requiresAuth: true }
   },
   {
     path: "/404",
@@ -59,7 +59,7 @@ const router = new VueRouter({
 // Ensure we checked auth before each page load - keep some routes safe
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    let user = JwtService.getToken();
+    let user = Jwt.getToken();
     if (user) {
       next();
     } else {
