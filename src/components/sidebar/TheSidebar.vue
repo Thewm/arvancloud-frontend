@@ -21,17 +21,20 @@
 <script>
 export default {
   name: "Sidebar",
-  data: () => ({
-    list_items: [
-      {
-        name: "All Articles",
-        path: "/articles"
-      },
-      {
-        name: "Create Article",
-        path: "/articles/create"
-      }
-    ]
-  })
+  data: () => ({}),
+  computed: {
+    list_items() {
+      return [
+        {
+          name: "All Articles",
+          path: "/articles"
+        },
+        {
+          name: "Create Article",
+          path: "/articles/create"
+        }
+      ];
+    }
+  }
 };
 </script>
