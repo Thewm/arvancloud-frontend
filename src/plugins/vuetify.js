@@ -14,8 +14,12 @@ export default new Vuetify({
         error_alert_text: "#9f4f48",
         charcoal: "#373a3c",
         logout: "#5bc0de",
-        table_header: "#55595c"
+        table_header: "#55595c",
+        success: "#4b713d"
       }
     }
+  },
+  breakpoint: {
+    laptopBreakpoint: "md" // This is equivalent to a value of 1200
   }
 });
