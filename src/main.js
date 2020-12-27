@@ -4,8 +4,8 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 
-import ApiService from "./common/service.api";
-import { CHECK_AUTH } from "./store/actions.type";
+import ApiService from "./common/services/apiService";
+import { checkAuth } from "@/store/types/actions";
 
 Vue.config.productionTip = false;
 
@@ -14,7 +14,7 @@ ApiService.init();
 
 // Keep user logged in over the app
 router.beforeEach((to, from, next) =>
-  Promise.all([store.dispatch(CHECK_AUTH)]).then(next)
+  Promise.all([store.dispatch(checkAuth)]).then(next)
 );
 
 new Vue({
