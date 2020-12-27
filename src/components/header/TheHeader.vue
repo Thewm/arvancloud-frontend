@@ -1,18 +1,12 @@
 <template>
   <v-app-bar color="charcoal" flat app dark clipped-left>
+    <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
     <div class="d-md-flex align-center">
-      <span
-        class="headline mr-6"
-        :class="[$vuetify.breakpoint.mdAndUp ? 'headline mr-6' : 'title mr-3']"
+      <span class="headline mr-6" :class="titleNameResponsiveSetup"
         >Arvan Challenge</span
       >
-      <span
-        :class="[
-          $vuetify.breakpoint.mdAndUp
-            ? 'title font-weight-thin text-capitalize'
-            : 'subtitle-2 font-weight-thin text-capitalize'
-        ]"
-        >Welcome {{ currentUser.username || guest }}
+      <span :class="headerNameResponsiveSetup"
+        >Welcome {{ displayUsername }}
       </span>
     </div>
     <v-spacer></v-spacer>
@@ -20,13 +14,9 @@
       <v-btn
         color="logout"
         outlined
-        :class="[
-          $vuetify.breakpoint.smAndUp
-            ? 'px-4 text-capitalize'
-            : 'px-2 text-capitalize'
-        ]"
+        :class="logoutBtnResponsiveSetup"
         @click="logout"
-        >Logout</v-btn
+        >logout</v-btn
       >
     </div>
   </v-app-bar>
@@ -34,19 +24,41 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { LOGOUT } from "@/store/actions.type";
+import { logout } from "@/store/types/actions";
 
 export default {
   name: "Header",
   data: () => ({
-    guest: "guest"
+    drawer: true
   }),
   computed: {
-    ...mapGetters(["currentUser"])
+    ...mapGetters(["currentUser"]),
+    displayUsername() {
+      return this.currentUser.username || "guest";
+    },
+    headerNameResponsiveSetup() {
+      return [
+        this.$vuetify.breakpoint.mdAndUp
+          ? "title font-weight-thin text-capitalize"
+          : "subtitle-2 font-weight-thin text-capitalize"
+      ];
+    },
+    titleNameResponsiveSetup() {
+      return [
+        this.$vuetify.breakpoint.mdAndUp ? "headline mr-6" : "title mr-3"
+      ];
+    },
+    logoutBtnResponsiveSetup() {
+      return [
+        this.$vuetify.breakpoint.smAndUp
+          ? "px-4 text-capitalize"
+          : "px-2 text-capitalize"
+      ];
+    }
   },
   methods: {
     logout() {
-      this.$store.dispatch(LOGOUT).then(() => {
+      this.$store.dispatch(logout).then(() => {
         this.$router.push({ name: "Login" });
       });
     }
