@@ -1,0 +1,13 @@
+export const publishArticle = "publishArticle";
+export const deleteArticle = "deleteArticle";
+export const editArticle = "editArticle";
+export const addTagToArticle = "addTagToArticle";
+export const removeTagFromArticle = "removeTagFromArticle";
+export const resetArticleState = "resetArticleState";
+export const checkAuth = "checkAuth";
+export const fetchArticle = "fetchArticle";
+export const fetchArticles = "fetchArticles";
+export const fetchTags = "fetchTags";
+export const login = "login";
+export const logout = "logout";
+export const register = "register";
