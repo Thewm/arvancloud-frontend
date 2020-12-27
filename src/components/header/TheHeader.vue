@@ -1,6 +1,10 @@
 <template>
   <v-app-bar color="charcoal" flat app dark clipped-left>
-    <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
+    <v-app-bar-nav-icon
+      v-if="$vuetify.breakpoint.mdAndDown"
+      v-model="drawer"
+      @click="showExpandedSidebar"
+    ></v-app-bar-nav-icon>
     <div class="d-md-flex align-center">
       <span class="headline mr-6" :class="titleNameResponsiveSetup"
         >Arvan Challenge</span
@@ -25,11 +29,11 @@
 <script>
 import { mapGetters } from "vuex";
 import { logout } from "@/store/types/actions";
-
+import { eventBus } from "@/main";
 export default {
   name: "Header",
   data: () => ({
-    drawer: true
+    drawer: false
   }),
   computed: {
     ...mapGetters(["currentUser"]),
@@ -61,6 +65,11 @@ export default {
       this.$store.dispatch(logout).then(() => {
         this.$router.push({ name: "Login" });
       });
+    },
+    showExpandedSidebar() {
+      this.drawer = !this.drawer;
+      eventBus.$emit("showExpandedSidebar", this.drawer);
+      this.drawer = !this.drawer;
     }
   }
 };
