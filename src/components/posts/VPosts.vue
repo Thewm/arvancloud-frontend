@@ -1,4 +1,3 @@
-/* eslint-disable */
 <template>
   <v-data-table
     :headers="headers"
@@ -16,17 +15,25 @@
     no-data-text="Something went wrong, please refresh page or check your network connection"
     class="elevation-0"
   >
+    <!-- There aren't errors actually, vuetify will update this confliction -->
     <template v-slot:item.body="{ item }">
       {{ item.body.slice(0, 20) }}
+      <!-- showing first 20 words of article's body -->
+    </template>
+    <template v-slot:item.title="{ item }">
+      {{ item.title.slice(0, 20) }}
+      <!-- for title also i choose to show 20 words,
+      because sometimes title goes to very long and rare -->
     </template>
     <template v-slot:item.hash>
-      <v-icon color="primary">mdi-numeric</v-icon>
+      <v-icon color="primary">mdi-circle-medium</v-icon>
     </template>
-
+    <!-- vuetify doesnt let us to show counter, and im sorry for that, instead of i can show a little medium size circle -->
     <template v-slot:item.createdAt="{ item }">
       {{ dateFormatter(item.createdAt) }}
+      <!-- Formatting date with moment.js -->
     </template>
-    <template v-slot:item.action>
+    <template v-slot:item.action="{ item }">
       <v-menu bottom left offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -35,16 +42,24 @@
             v-on="on"
             v-bind="attrs"
             elevation="0"
+            title="Only When you are author"
           >
             ...
             <v-icon class="white--text ml-2" small>mdi-menu-down</v-icon>
           </v-btn>
         </template>
-        <v-list color="white" outlined style="width: 11rem">
+        <v-list
+          color="white"
+          outlined
+          style="width: 11rem"
+          :disabled="item.author.username !== currentUser.username"
+        >
+          <!-- Only show edit and delete list when you are an author of article -->
           <v-list-item>
-            <v-list-item-action>
+            <v-list-item-action @click="editArticle(item.slug)">
               <v-list-item-action-text
                 class="font-weight-regular subtitle-1 black--text"
+                style="cursor: pointer"
                 >Edit</v-list-item-action-text
               >
             </v-list-item-action>
@@ -52,7 +67,7 @@
           <v-divider></v-divider>
           <v-list-item>
             <v-list-item-action>
-              <v-dialog max-width="500" close-delay="1000" persistent>
+              <v-dialog max-width="500">
                 <template v-slot:activator="{ on, attrs }">
                   <v-list-item-action-text
                     v-bind="attrs"
@@ -93,7 +108,10 @@
                         dark
                         elevation="0"
                         class="px-6 py-5 my-2 text-capitalize"
-                        @click="deleteArticle"
+                        @click="
+                          deleteArticle(item.slug);
+                          dialog.value = false;
+                        "
                         >Yes</v-btn
                       >
                     </v-card-actions>
@@ -110,11 +128,13 @@
 
 <script>
 import moment from "moment";
-import { deleteArticle } from "@/store/types/actions";
+import { mapGetters } from "vuex";
+import { deleteArticle, updateArticles } from "@/store/types/actions";
+import { eventBus } from "@/main";
 export default {
   name: "VPosts",
   data: () => ({
-    itemsPerPage: 10,
+    itemsPerPage: 10
   }),
   props: {
     headers: {
@@ -134,19 +154,28 @@ export default {
       required: true
     }
   },
+  computed: {
+    ...mapGetters(["currentUser"]) // checking current user's username is match with author username
+  },
   methods: {
-    async deleteArticle() {
+    async deleteArticle(slug) {
       try {
-        console.log(this.article);
-        await this.$store.dispatch(deleteArticle, this.article.slug);
-        this.$vuetify.dialog.value = false;
-        this.$router.push({ name: "Dashboard" });
+        const resStatus = await this.$store.dispatch(deleteArticle, slug);
+        if (resStatus[1] === 200) {
+          const items = this.items.filter(item => item.slug !== slug);
+          this.$store.dispatch(updateArticles, items);
+        }
+        // Delete article from list when distpaching finish correctly
       } catch (err) {
         console.error(err);
       }
     },
     dateFormatter(date) {
       return moment(date).format("ll");
+    },
+    editArticle(slug) {
+      eventBus.$emit("editArticle", slug);
+      this.$router.push({ name: "create-article" });
     }
   }
 };
