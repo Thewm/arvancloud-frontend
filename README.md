@@ -40,8 +40,4 @@ I made a develop branch and push my codes first on it, then merge this branch to
 
 
 
-NOTE:   
-Edit article and fetching tags in create article doesnt work properly, i will fix that ASAP, and push it to another branch to keep that separated, because the deadline of project finished.
-
-
 <p align="center">Thanks for the attention</p>
