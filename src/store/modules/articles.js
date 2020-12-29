@@ -1,11 +1,16 @@
 import { TagsService } from "@/common/services/tagsService";
 import { ArticlesService } from "@/common/services/articlesService";
-import { fetchArticles, fetchTags, deleteArticle } from "../types/actions";
+import {
+  fetchArticles,
+  fetchTags,
+  deleteArticle,
+  updateArticles
+} from "../types/actions";
 import {
   setLoading,
   setArticles,
   setTags,
-  updateArticleInList
+  setUpdateArticles
 } from "../types/mutations";
 
 const state = {
@@ -52,6 +57,9 @@ const actions = {
   },
   [deleteArticle](context, slug) {
     return ArticlesService.destroy(slug);
+  },
+  [updateArticles]({ commit }, params) {
+    commit(setUpdateArticles, params);
   }
 };
 
@@ -67,12 +75,8 @@ const mutations = {
   [setTags](state, tags) {
     state.tags = tags;
   },
-  [updateArticleInList](state, data) {
-    state.articles = state.articles.map(article => {
-      if (article.slug !== data.slug) {
-        return article;
-      }
-    });
+  [setUpdateArticles](state, articles) {
+    state.articles = articles;
   }
 };
 

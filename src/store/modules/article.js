@@ -1,4 +1,3 @@
-import Vue from "vue";
 import { ArticlesService } from "@/common/services/articlesService";
 import {
   fetchArticle,
@@ -6,16 +5,9 @@ import {
   editArticle,
   addTagToArticle,
   removeTagFromArticle,
-  deleteArticle,
-  resetArticleState
+  deleteArticle
 } from "../types/actions";
-import {
-  resetModuleState,
-  setArticle,
-  addTag,
-  removeTag
-  //   updateArticleInList
-} from "../types/mutations";
+import { setArticle, addTag, removeTag } from "../types/mutations";
 
 const initialState = {
   article: {
@@ -31,10 +23,6 @@ export const state = { ...initialState };
 
 export const actions = {
   async [fetchArticle](context, articleSlug) {
-    // avoid extronuous network call if article exists
-    // if (prevArticle !== undefined) {
-    //   return context.commit(setArticle, prevArticle);
-    // }
     const { data } = await ArticlesService.get(articleSlug);
     context.commit(setArticle, data.article);
     return data;
@@ -42,8 +30,11 @@ export const actions = {
   [publishArticle]({ state }) {
     return ArticlesService.create(state.article);
   },
-  [deleteArticle](context, slug) {
-    return ArticlesService.destroy(slug);
+  async [deleteArticle](context, slug) {
+    const res = await ArticlesService.destroy(slug);
+    if (res.status === 200) {
+      return new Promise(resolve => resolve(200));
+    }
   },
   [editArticle]({ state }) {
     return ArticlesService.update(state.article.slug, state.article);
@@ -53,9 +44,6 @@ export const actions = {
   },
   [removeTagFromArticle](context, tag) {
     context.commit(removeTag, tag);
-  },
-  [resetArticleState]({ commit }) {
-    commit(resetModuleState);
   }
 };
 
@@ -68,11 +56,6 @@ export const mutations = {
   },
   [removeTag](state, tag) {
     state.article.tagList = state.article.tagList.filter(t => t !== tag);
-  },
-  [resetModuleState]() {
-    for (let f in state) {
-      Vue.set(state, f, initialState[f]);
-    }
   }
 };
 

@@ -7,5 +7,5 @@ export const setError = "setError";
 export const setTags = "setTags";
 export const addTag = "addTag";
 export const removeTag = "removeTag";
-export const updateArticleInList = "updateArticleInList";
 export const resetModuleState = "resetModuleState";
+export const setUpdateArticles = "setUpdateArticles";
