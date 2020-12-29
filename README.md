@@ -35,8 +35,12 @@ We have all views (pages) here.
 #### `main.js`    
 Here our main file, and i create my event bus here, calling ApiService to use over the app and Keep user logged in over the app with beforeEach and promise.all .    
 
+#### `commits`   
+I made a develop branch and push my codes first on it, then merge this branch to master.
 
-### NOTE:   
+
+
+NOTE:   
 Edit article and fetching tags in create article doesnt work properly, i will fixed that ASAP, and push it to another branch to keep that separated because deadline of project finished.
 
 
