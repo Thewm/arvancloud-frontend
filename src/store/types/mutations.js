@@ -1,0 +1,11 @@
+export const setArticles = "setArticles";
+export const setLoading = "setLoading";
+export const CLEAN_AUTH = "logOut";
+export const setArticle = "setArticle";
+export const setUser = "setUser";
+export const setError = "setError";
+export const setTags = "setTags";
+export const addTag = "addTag";
+export const removeTag = "removeTag";
+export const resetModuleState = "resetModuleState";
+export const setUpdateArticles = "setUpdateArticles";
