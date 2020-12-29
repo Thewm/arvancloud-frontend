@@ -66,6 +66,7 @@ export default {
         this.$router.push({ name: "Login" });
       });
     },
+    // This was a tricky solution, we use event bus to show humburger icon and when user click, we show expanded sidebar (because they are two separated components)
     showExpandedSidebar() {
       this.drawer = !this.drawer;
       eventBus.$emit("showExpandedSidebar", this.drawer);
