@@ -9,20 +9,40 @@
       <Sidebar />
       <v-col>
         <v-row class="ml-3 mb-8">
-          <h1 class="display-2 font-weight-regular">All Posts</h1>
+          <v-col cols="8">
+            <h1 class="display-2 font-weight-regular">All Posts</h1>
+          </v-col>
+          <v-col v-if="false">
+            <v-alert text tile color="success" transition="scale-transition">
+              <div>
+                <strong class="mr-2">Well done!</strong>
+                <span>Article created succeccfully</span>
+              </div>
+              <div>
+                <strong class="mr-2">Well done!</strong>
+                <span>Article updated succeccfully</span>
+              </div>
+              <div><span>Article updated succeccfully</span></div>
+            </v-alert>
+          </v-col>
         </v-row>
         <v-row class="justify-center">
           <v-col cols="11">
-            <Posts :headers="headers" :items="items" :page="page"></Posts>
+            <Posts
+              :headers="tableHeader"
+              :items="articles"
+              :page="page"
+              :isLoading="isLoading"
+            />
           </v-col>
         </v-row>
         <v-row class="justify-center">
           <v-col cols="6">
             <v-pagination
-              v-if="paginate"
+              v-if="showPagination"
               v-model="page"
               :length="pageCount"
-              total-visible="10"
+              total-visible="articles.length"
               @input="handlePage"
             ></v-pagination>
           </v-col>
@@ -35,7 +55,9 @@
 <script>
 import Header from "@/components/header/TheHeader";
 import Sidebar from "@/components/sidebar/TheSidebar";
-import Posts from "@/components/posts/Posts";
+import Posts from "@/components/posts/VPosts";
+import { mapGetters } from "vuex";
+import { fetchArticles } from "@/store/types/actions";
 export default {
   name: "Dashboard",
   components: {
@@ -45,209 +67,81 @@ export default {
   },
   data() {
     return {
-      page: 1,
-      headers: [
+      page: 1
+    };
+  },
+  computed: {
+    tableHeader() {
+      return [
         {
           text: "#",
-          value: "title",
+          value: "hash",
           class: "table_header--text subtitle-1 font-weight-bold form_primary"
         },
         {
           text: "Title",
-          value: "name",
+          value: "title",
           class: "table_header--text subtitle-1 font-weight-bold form_primary"
         },
         {
           text: "Authors",
-          value: "name",
+          value: "author.username",
           class: "table_header--text subtitle-1 font-weight-bold form_primary"
         },
         {
           text: "Tags",
-          value: "name",
+          value: "tagList",
           class: "table_header--text subtitle-1 font-weight-bold form_primary"
         },
         {
           text: "Excerpt",
-          value: "name",
+          value: "body",
           class: "table_header--text subtitle-1 font-weight-bold form_primary"
         },
         {
           text: "",
           align: "right",
-          value: "carbs",
+          value: "createdAt",
           class: "table_header--text subtitle-1 font-weight-bold form_primary"
         },
         {
           text: "Created",
-          align: "center",
+          align: "left",
           value: "action",
           class: "table_header--text subtitle-1 font-weight-bold form_primary"
         }
-      ],
-      items: [
-        {
-          title: 1,
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: "1%"
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: "1%"
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: "7%"
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: "8%"
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: "16%"
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: "0%"
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: "2%"
-        },
-        {
-          name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: "45%"
-        },
-        {
-          name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: "22%"
-        },
-        {
-          name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: "6%"
-        },
-        {
-          title: 1,
-          name: "Ice cream",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: "1%"
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: "1%"
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: "7%"
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: "8%"
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: "16%"
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: "0%"
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: "2%"
-        }
-      ]
-    };
-  },
-  computed: {
-    paginate() {
-      let pages = Math.ceil(this.items.length / 10);
-      if (pages <= 1) {
-        return false;
-      } else {
-        return true;
-      }
+      ];
+    },
+    listConfig() {
+      const filters = {};
+      filters.offset = this.page - 1;
+      filters.limit = 10;
+      return filters;
+    },
+    showPagination() {
+      let pages = Math.ceil(this.articles.length / 10);
+      return pages > 1;
     },
     pageCount() {
-      let pageCounter = Math.ceil(this.items.length / 10);
-      return pageCounter;
-    }
+      return Math.ceil(this.articles.length / 10);
+    },
+    ...mapGetters(["articles", "isLoading"])
+  },
+  mounted() {
+    this.fetchArticles();
   },
   methods: {
+    fetchArticles() {
+      this.$store.dispatch(fetchArticles, this.listConfig);
+    },
+    // work with @input vuetify built in event on pagination to change the route
     handlePage(value) {
       this.page = value;
       if (this.page === 1) {
-        this.$router.push("/articles");
+        this.$router.push({ name: "Dashboard" });
       } else {
-        this.$router.push(`articles/page/${this.page}`);
+        // ASSUMPTION - when user click on two, we are going to /page/2, or if we wanna goes to /page/1 instead of 2; we should make ${this.page - 1} down below
+        this.$router.push(`/articles/page/${this.page}`);
       }
     }
   }
